@@ -1,0 +1,49 @@
+esphome:
+  name: cover_testingah
+  platform: ESP8266                                          
+  board: esp12e       
+
+#...
+
+# sensor:
+
+output:                
+  - platform: gpio
+    pin: 5                                                   
+    id: 'generic_out'
+                                                             
+switch:        
+  - platform: output
+    id: "open_cover_switch_a"                                
+    output: 'generic_out'
+cover:                                                                                                                    
+  - platform: time_based                                                                                                  
+    name: "Testing cover"
+                              
+    open_action:                                             
+      - switch.turn_on: open_cover_switch_a
+    open_duration: 30s
+                              
+    close_action:                                            
+      - switch.turn_on: open_cover_switch_a
+    close_duration: 30s
+    stop_action:                                             
+      - switch.turn_off: open_cover_switch_a
+                                                             
+    open_calibrate_polynomial: 
+      degree: 2     
+      datapoints:                                            
+        # Map 0.0 (from sensor) to 0.0 (true value)
+        - 0.0 -> 0.0          
+        - 0.3 -> 0.7
+        - 0.7 -> 0.9                                         
+        - 1.0 -> 1.0
+                                                             
+    close_calibrate_polynomial: 
+      degree: 2          
+      datapoints:                                            
+        # Map 0.0 (from sensor) to 0.0 (true value)
+        - 0.0 -> 0.0    
+        - 0.3 -> 0.7
+        - 0.7 -> 0.9                                         
+        - 1.0 -> 1.0
